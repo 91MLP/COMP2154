@@ -1,20 +1,16 @@
-
-import { supabase } from "./lib/supabase"
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./components/Login";
+import SignUp from "./components/SignUp";
 
 function App() {
-  //test supabase connection(status: good connection)
-  async function testConnection() {
-    const{data, error} = await supabase.from("student_signUp").select("*")
-    console.log("data",data)
-    console.log("error",error)
-  }
-
   return (
-    <>
-    <button onClick={()=>testConnection()} >click</button>
-    
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
