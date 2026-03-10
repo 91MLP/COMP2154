@@ -1,21 +1,23 @@
-
-import { supabase } from "./lib/supabase"
-
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import NavBar from "./components/NavBar";
+import ProfileSetting from "./components/ProfileSetting";
 
 function App() {
-  //test supabase connection(status: good connection)
-  async function testConnection() {
-    const{data, error} = await supabase.from("student_signUp").select("*")
-    console.log("data",data)
-    console.log("error",error)
-  }
-
   return (
-    <>
-    <button onClick={()=>testConnection()} >click</button>
-    
-    </>
-  )
+    <BrowserRouter>
+      <NavBar /> 
+      
+      <div className="main-content">
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" />} />
+          
+          
+          <Route path="/profile" element={<ProfileSetting />} />
+          
+        </Routes>
+      </div>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
