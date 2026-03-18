@@ -30,6 +30,14 @@ export default function NavBar() {
                         Add Assignment
                     </NavLink>
                 </li>
+                <li>
+                    <NavLink
+                        to="/profile"
+                        className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+                    >
+                        Profile
+                    </NavLink>
+                </li>
             </ul>
         </nav>
     );

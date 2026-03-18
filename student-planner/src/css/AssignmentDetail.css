@@ -1,0 +1,195 @@
+.ad-container {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    min-height: 100vh;
+    background-color: #f0f4f8;
+}
+
+.ad-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 580px;
+    overflow: hidden;
+}
+
+/* Priority Banner */
+.ad-priority-banner {
+    text-align: center;
+    padding: 0.5rem;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+/* Header */
+.ad-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1.5rem 1.5rem 0.5rem;
+}
+
+.ad-title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.ad-course {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin: 0.2rem 0 0;
+}
+
+.ad-status {
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.3rem 0.7rem;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.ad-status.complete {
+    background-color: #d5f5e3;
+    color: #1e8449;
+}
+
+.ad-status.incomplete {
+    background-color: #fdecea;
+    color: #c0392b;
+}
+
+.ad-due {
+    padding: 0 1.5rem;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+/* Success Message */
+.ad-success {
+    margin: 0.5rem 1.5rem;
+    color: #27ae60;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.ad-deleted {
+    padding: 2rem;
+    text-align: center;
+    color: #e74c3c;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* Action Buttons */
+.ad-actions {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    flex-wrap: wrap;
+}
+
+.ad-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.ad-btn:hover {
+    opacity: 0.85;
+}
+
+.ad-btn.edit {
+    background-color: #3498db;
+    color: #ffffff;
+}
+
+.ad-btn.delete {
+    background-color: #e74c3c;
+    color: #ffffff;
+}
+
+.ad-btn.complete {
+    background-color: #2ecc71;
+    color: #ffffff;
+}
+
+/* Edit Form */
+.ad-edit-form {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #ecf0f1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.ad-edit-form h3 {
+    font-size: 1rem;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.ad-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #555;
+    margin-top: 0.4rem;
+}
+
+.ad-input {
+    padding: 0.6rem 0.9rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.ad-input:focus {
+    border-color: #3498db;
+}
+
+.ad-edit-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+}
+
+/* Comment Section */
+.ad-comment-section {
+    padding: 1rem 1.5rem 1.5rem;
+    border-top: 1px solid #ecf0f1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.ad-comment-section h3 {
+    font-size: 1rem;
+    color: #2c3e50;
+    margin-bottom: 0.25rem;
+}
+
+.ad-textarea {
+    padding: 0.6rem 0.9rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s ease;
+    font-family: inherit;
+}
+
+.ad-textarea:focus {
+    border-color: #3498db;
+}
