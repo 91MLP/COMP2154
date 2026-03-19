@@ -1,11 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetAssignment } from "../api/StudentApi";
+import { getAssignment, getAssignments } from "../api/StudentApi";
 
-export function useGetAssignment(userId:string){
+export function useGetAssignments(userId: string) {
     return useQuery({
-        queryKey:["assignment_data_list",userId],
-        queryFn:()=>GetAssignment(userId),
-        enabled:!!userId
-    })
+        queryKey: ["assignments", userId],
+        queryFn: () => getAssignments(userId),
+        enabled: !!userId,
+    });
+}
 
+export function useGetAssignment(userId: string, assignmentId: string) {
+    return useQuery({
+        queryKey: ["assignments", userId, assignmentId],
+        queryFn: () => getAssignment(userId, assignmentId),
+        enabled: !!userId && !!assignmentId,
+    });
 }

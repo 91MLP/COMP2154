@@ -1,27 +1,16 @@
 import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { deleteAssignment, updateAssignment } from "../api/StudentApi";
+import { queryClient } from "../lib/queryClient";
+import { useGetAssignment } from "../query/AssignmentQuery";
 import "../css/AssignmentDetail.css";
+import type { Priority } from "../types/assignment";
 
-type Priority = "Red" | "Yellow" | "Green";
-
-type Assignment = {
-    id: string;
+type AssignmentEditForm = {
     course_number: string;
     assignment_name: string;
     due_date: string;
     priority: Priority;
-    comment: string;
-    completed: boolean;
-};
-
-// Temporary mock data for testing — replace with real Supabase data later
-const mockAssignment: Assignment = {
-    id: "1",
-    course_number: "COMP 2154",
-    assignment_name: "Project Proposal",
-    due_date: "2026-03-25",
-    priority: "Red",
-    comment: "Remember to include the system diagram.",
-    completed: false,
 };
 
 const priorityColors: Record<Priority, string> = {
@@ -30,50 +19,100 @@ const priorityColors: Record<Priority, string> = {
     Green: "#2ecc71",
 };
 
-export default function AssignmentDetail() {
-    const [assignment, setAssignment] = useState<Assignment>(mockAssignment);
+export default function AssignmentDetail({ userId }: { userId: string }) {
+    const navigate = useNavigate();
+    const { id } = useParams();
+    const { data: assignment, isLoading, error } = useGetAssignment(userId, id ?? "");
     const [isEditing, setIsEditing] = useState(false);
-    const [editForm, setEditForm] = useState(assignment);
-    const [deleted, setDeleted] = useState(false);
+    const [editForm, setEditForm] = useState<AssignmentEditForm | null>(null);
+    const [commentDraft, setCommentDraft] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     function handleEditChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
+        if (!editForm) return;
         setEditForm({ ...editForm, [e.target.name]: e.target.value });
     }
 
-    function handleSaveEdit() {
-        setAssignment(editForm);
-        setIsEditing(false);
-        setSuccessMessage("Assignment updated successfully!");
-        setTimeout(() => setSuccessMessage(""), 3000);
-    }
+    async function handleSaveEdit() {
+        if (!editForm || !assignment) return;
 
-    function handleDelete() {
-        if (confirm("Are you sure you want to delete this assignment?")) {
-            setDeleted(true);
+        try {
+            await updateAssignment(userId, assignment.id, {
+                course_number: editForm.course_number,
+                assignment_name: editForm.assignment_name,
+                due_date: editForm.due_date,
+                priority: editForm.priority,
+            });
+            await queryClient.invalidateQueries({ queryKey: ["assignments", userId] });
+            await queryClient.invalidateQueries({ queryKey: ["assignments", userId, assignment.id] });
+            setIsEditing(false);
+            setErrorMessage("");
+            setSuccessMessage("Assignment updated successfully!");
+            setTimeout(() => setSuccessMessage(""), 3000);
+        } catch (error) {
+            const message = error instanceof Error ? error.message : "Failed to update assignment.";
+            setErrorMessage(message);
         }
     }
 
-    function handleToggleComplete() {
-        setAssignment((prev) => ({ ...prev, completed: !prev.completed }));
-        setSuccessMessage(assignment.completed ? "Marked as incomplete." : "Marked as complete! 🎉");
-        setTimeout(() => setSuccessMessage(""), 3000);
+    async function handleDelete() {
+        if (!assignment) return;
+        if (confirm("Are you sure you want to delete this assignment?")) {
+            try {
+                await deleteAssignment(userId, assignment.id);
+                await queryClient.invalidateQueries({ queryKey: ["assignments", userId] });
+                navigate("/home");
+            } catch (error) {
+                const message = error instanceof Error ? error.message : "Failed to delete assignment.";
+                setErrorMessage(message);
+            }
+        }
     }
 
-    function handleSaveComment() {
-        setAssignment((prev) => ({ ...prev, comment: editForm.comment }));
-        setSuccessMessage("Comment saved!");
-        setTimeout(() => setSuccessMessage(""), 3000);
+    async function handleToggleComplete() {
+        if (!assignment) return;
+
+        try {
+            await updateAssignment(userId, assignment.id, {
+                completed: !assignment.completed,
+            });
+            await queryClient.invalidateQueries({ queryKey: ["assignments", userId] });
+            await queryClient.invalidateQueries({ queryKey: ["assignments", userId, assignment.id] });
+            setErrorMessage("");
+            setSuccessMessage(assignment.completed ? "Marked as incomplete." : "Marked as complete!");
+            setTimeout(() => setSuccessMessage(""), 3000);
+        } catch (error) {
+            const message = error instanceof Error ? error.message : "Failed to update status.";
+            setErrorMessage(message);
+        }
     }
 
-    if (deleted) {
-        return (
-            <div className="ad-container">
-                <div className="ad-card">
-                    <p className="ad-deleted">Assignment has been deleted.</p>
-                </div>
-            </div>
-        );
+    async function handleSaveComment() {
+        if (!assignment) return;
+
+        try {
+            await updateAssignment(userId, assignment.id, {
+                comment: commentDraft ?? assignment.comment,
+            });
+            await queryClient.invalidateQueries({ queryKey: ["assignments", userId] });
+            await queryClient.invalidateQueries({ queryKey: ["assignments", userId, assignment.id] });
+            setErrorMessage("");
+            setSuccessMessage("Comment saved!");
+            setTimeout(() => setSuccessMessage(""), 3000);
+        } catch (error) {
+            const message = error instanceof Error ? error.message : "Failed to save comment.";
+            setErrorMessage(message);
+        }
+    }
+
+    if (isLoading) {
+        return <div className="ad-container"><div className="ad-card"><p className="ad-deleted">Loading assignment...</p></div></div>;
+    }
+
+    if (error || !assignment) {
+        const message = error instanceof Error ? error.message : "Assignment not found.";
+        return <div className="ad-container"><div className="ad-card"><p className="ad-deleted">{message}</p></div></div>;
     }
 
     return (
@@ -102,10 +141,22 @@ export default function AssignmentDetail() {
                 <p className="ad-due">📅 Due: {assignment.due_date}</p>
 
                 {successMessage && <p className="ad-success">{successMessage}</p>}
+                {errorMessage && <p className="ad-deleted">{errorMessage}</p>}
 
                 {/* Action Buttons */}
                 <div className="ad-actions">
-                    <button className="ad-btn edit" onClick={() => { setIsEditing(true); setEditForm(assignment); }}>
+                    <button
+                        className="ad-btn edit"
+                        onClick={() => {
+                            setIsEditing(true);
+                            setEditForm({
+                                course_number: assignment.course_number,
+                                assignment_name: assignment.assignment_name,
+                                due_date: assignment.due_date ?? "",
+                                priority: assignment.priority,
+                            });
+                        }}
+                    >
                         ✏️ Edit
                     </button>
                     <button className="ad-btn delete" onClick={handleDelete}>
@@ -117,7 +168,7 @@ export default function AssignmentDetail() {
                 </div>
 
                 {/* Edit Form */}
-                {isEditing && (
+                {isEditing && editForm && (
                     <div className="ad-edit-form">
                         <h3>Edit Assignment</h3>
 
@@ -142,7 +193,7 @@ export default function AssignmentDetail() {
                             className="ad-input"
                             type="date"
                             name="due_date"
-                            value={editForm.due_date}
+                            value={editForm.due_date ?? ""}
                             onChange={handleEditChange}
                         />
 
@@ -160,7 +211,7 @@ export default function AssignmentDetail() {
 
                         <div className="ad-edit-actions">
                             <button className="ad-btn edit" onClick={handleSaveEdit}>💾 Save</button>
-                            <button className="ad-btn delete" onClick={() => setIsEditing(false)}>Cancel</button>
+                            <button className="ad-btn delete" type="button" onClick={() => setIsEditing(false)}>Cancel</button>
                         </div>
                     </div>
                 )}
@@ -168,14 +219,14 @@ export default function AssignmentDetail() {
                 {/* Comment / Notes Section */}
                 <div className="ad-comment-section">
                     <h3>📝 Notes / Comments</h3>
-                    <textarea
-                        className="ad-textarea"
-                        name="comment"
-                        rows={4}
-                        placeholder="Add a note or comment..."
-                        value={editForm.comment}
-                        onChange={handleEditChange}
-                    />
+                        <textarea
+                            className="ad-textarea"
+                            name="comment"
+                            rows={4}
+                            placeholder="Add a note or comment..."
+                            value={commentDraft ?? assignment.comment}
+                            onChange={(e) => setCommentDraft(e.target.value)}
+                        />
                     <button className="ad-btn edit" onClick={handleSaveComment}>
                         💾 Save Comment
                     </button>
