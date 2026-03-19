@@ -1,0 +1,76 @@
+.aa-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  min-height: calc(100vh - 70px);
+  background-color: #f5f7fb;
+}
+
+.aa-card {
+  width: 100%;
+  max-width: 560px;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.aa-card h2 {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  color: #1a1a2e;
+}
+
+.aa-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.aa-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.aa-input,
+.aa-textarea {
+  padding: 0.8rem 0.95rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.aa-input:focus,
+.aa-textarea:focus {
+  outline: none;
+  border-color: #646cff;
+  box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.15);
+}
+
+.aa-textarea {
+  resize: vertical;
+}
+
+.aa-error {
+  margin: 0.25rem 0 0;
+  color: #dc2626;
+  font-size: 0.95rem;
+}
+
+.aa-submit {
+  margin-top: 0.75rem;
+  padding: 0.85rem 1rem;
+  border: none;
+  border-radius: 10px;
+  background: #646cff;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.aa-submit:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}

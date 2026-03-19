@@ -22,12 +22,14 @@ export default function ProfileSetting() {
                     .from('profiles')
                     .select('full_name')
                     .eq('id', user.id)
-                    .single();
+                    .maybeSingle();
 
+                if (error) throw error;
                 if (data) setFullName(data.full_name);
             }
         } catch (error) {
-            console.error("Error loading user data");
+            console.error("Error loading user data", error);
+            setMessage("Error loading profile");
         } finally {
             setLoading(false);
         }
