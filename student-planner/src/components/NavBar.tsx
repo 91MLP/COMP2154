@@ -18,14 +18,20 @@ export default function NavBar() {
 
     return (
         <nav className="navbar">
-            <div className="navbar-brand">📚 Study Planner</div>
+            <div className="navbar-brand">
+                <span className="navbar-brand-mark">SP</span>
+                <div>
+                    <div className="navbar-brand-title">Study Planner</div>
+                    <div className="navbar-brand-subtitle">Stay ahead of every deadline</div>
+                </div>
+            </div>
             <ul className="navbar-links">
                 <li>
                     <NavLink
                         to="/home"
                         className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
                     >
-                        Home
+                        Dashboard
                     </NavLink>
                 </li>
                 <li>

@@ -35,6 +35,12 @@ export async function createAssignment(userId: string, input: AssignmentInput): 
             priority: input.priority,
             comment: input.comment,
             completed: false,
+            reminder_enabled: input.reminder_enabled,
+            reminder_offset_hours: input.reminder_offset_hours,
+            remind_at: input.remind_at,
+            reminder_sent: false,
+            reminder_sent_at: null,
+            reminder_error: null,
         })
         .select()
         .single();
@@ -46,7 +52,14 @@ export async function createAssignment(userId: string, input: AssignmentInput): 
 export async function updateAssignment(
     userId: string,
     assignmentId: string,
-    updates: Partial<AssignmentInput & { completed: boolean }>,
+    updates: Partial<
+        AssignmentInput & {
+            completed: boolean;
+            reminder_sent: boolean;
+            reminder_sent_at: string | null;
+            reminder_error: string | null;
+        }
+    >,
 ): Promise<Assignment> {
     const payload = {
         ...updates,

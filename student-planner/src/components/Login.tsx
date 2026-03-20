@@ -36,20 +36,35 @@ export default function Login() {
 
     return (
         <div className="login-container">
-            <div className="login-card">
-                <h2>Login</h2>
-                <form className="login-form" onSubmit={handleSubmit}>
-                    <input className="login-input" type="email" placeholder="Email" value={studentEmail} onChange={(e) => setStudentEmail(e.target.value)} />
-                    <input className="login-input" type="password" placeholder="Password" value={studentPassword} onChange={(e) => setStudentPassword(e.target.value)} />
-                    <button className="login-btn" type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? "Logging In..." : "Login"}
-                    </button>
-                </form>
-                <p className="login-error">{errorMessage}</p>
-                <p className="login-switch">
-                    Don't have an account? <Link to="/signup">Sign Up</Link>
-                </p>
-            </div>
+            <section className="login-shell">
+                <div className="login-brand-panel">
+                    <p className="login-eyebrow">Student Workflow</p>
+                    <h1>Keep assignments visible before they become urgent.</h1>
+                    <p className="login-copy">
+                        Sign in to manage due dates, track reminder delivery, and stay ahead of upcoming coursework in one planner.
+                    </p>
+                    <div className="login-feature-list">
+                        <span>Priority tracking</span>
+                        <span>Email reminders</span>
+                        <span>Completion history</span>
+                    </div>
+                </div>
+                <div className="login-card">
+                    <h2>Welcome back</h2>
+                    <p className="login-caption">Sign in to continue planning your academic week.</p>
+                    <form className="login-form" onSubmit={handleSubmit}>
+                        <input className="login-input" type="email" placeholder="Email" value={studentEmail} onChange={(e) => setStudentEmail(e.target.value)} />
+                        <input className="login-input" type="password" placeholder="Password" value={studentPassword} onChange={(e) => setStudentPassword(e.target.value)} />
+                        <button className="login-btn" type="submit" disabled={isSubmitting}>
+                            {isSubmitting ? "Logging In..." : "Login"}
+                        </button>
+                    </form>
+                    <p className="login-error">{errorMessage}</p>
+                    <p className="login-switch">
+                        Don't have an account? <Link to="/signup">Sign Up</Link>
+                    </p>
+                </div>
+            </section>
         </div>
     )
 }
