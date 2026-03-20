@@ -8,6 +8,7 @@ import SignUp from "./components/SignUp";
 import { supabase } from "./lib/supabase";
 import Dashboard from "./components/Dashboard";
 import AddAssignment from "./components/AddAssignment";
+import "./App.css";
 
 function ProtectedRoute({ isAuthenticated }: { isAuthenticated: boolean }) {
   if (!isAuthenticated) {

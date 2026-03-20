@@ -51,21 +51,36 @@ export default function SignUp() {
 
     return (
         <div className="signup-container">
-            <div className="signup-card">
-                <h2>Sign Up</h2>
-                <form className="signup-form" onSubmit={handleSubmit}>
-                    <input className="signup-input" type="email" placeholder="Email" value={studentEmail} onChange={(e) => setStudentEmail(e.target.value)} />
-                    <input className="signup-input" type="password" placeholder="Password" value={studentPassword} onChange={(e) => setStudentPassword(e.target.value)} />
-                    <button className="signup-btn" type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? "Signing Up..." : "Sign Up"}
-                    </button>
-                </form>
-                <p className="signup-error">{errorMessage}</p>
-                <p>{successMessage}</p>
-                <p className="signup-switch">
-                    Already have an account? <Link to="/login">Log In</Link>
-                </p>
-            </div>
+            <section className="signup-shell">
+                <div className="signup-brand-panel">
+                    <p className="signup-eyebrow">New Workspace</p>
+                    <h1>Set up a planner that keeps your course load under control.</h1>
+                    <p className="signup-copy">
+                        Create an account to organize assignments, schedule reminder emails, and keep track of work across courses without losing context.
+                    </p>
+                    <div className="signup-feature-list">
+                        <span>Course-based planning</span>
+                        <span>Reminder scheduling</span>
+                        <span>Progress visibility</span>
+                    </div>
+                </div>
+                <div className="signup-card">
+                    <h2>Create account</h2>
+                    <p className="signup-caption">Use your school email so reminders go to the inbox you actually monitor.</p>
+                    <form className="signup-form" onSubmit={handleSubmit}>
+                        <input className="signup-input" type="email" placeholder="Email" value={studentEmail} onChange={(e) => setStudentEmail(e.target.value)} />
+                        <input className="signup-input" type="password" placeholder="Password" value={studentPassword} onChange={(e) => setStudentPassword(e.target.value)} />
+                        <button className="signup-btn" type="submit" disabled={isSubmitting}>
+                            {isSubmitting ? "Signing Up..." : "Sign Up"}
+                        </button>
+                    </form>
+                    <p className="signup-error">{errorMessage}</p>
+                    {successMessage && <p className="signup-success">{successMessage}</p>}
+                    <p className="signup-switch">
+                        Already have an account? <Link to="/login">Log In</Link>
+                    </p>
+                </div>
+            </section>
         </div>
     )
 }

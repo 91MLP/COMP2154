@@ -9,6 +9,12 @@ export type Assignment = {
     priority: Priority;
     comment: string;
     completed: boolean;
+    reminder_enabled: boolean;
+    reminder_offset_hours: number | null;
+    remind_at: string | null;
+    reminder_sent: boolean;
+    reminder_sent_at: string | null;
+    reminder_error: string | null;
     created_at: string;
     updated_at: string;
 };
@@ -19,4 +25,7 @@ export type AssignmentInput = {
     due_date: string;
     priority: Priority;
     comment: string;
+    reminder_enabled: boolean;
+    reminder_offset_hours: number | null;
+    remind_at: string | null;
 };

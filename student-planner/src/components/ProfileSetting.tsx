@@ -55,7 +55,11 @@ export default function ProfileSetting() {
     return (
         <div className="profile-container">
             <div className="profile-card">
-                <h2>Account Settings</h2>
+                <p className="profile-eyebrow">Account Settings</p>
+                <h2>Keep your profile ready for reminder delivery.</h2>
+                <p className="profile-copy">
+                    Your account email stays read-only here, while your display name helps personalize the planner experience.
+                </p>
                 <form onSubmit={updateProfile} className="profile-form">
                     <div className="form-group">
                         <label>Email (Read-only)</label>
