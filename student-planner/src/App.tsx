@@ -8,13 +8,13 @@ import SignUp from "./components/SignUp";
 import { supabase } from "./lib/supabase";
 import Dashboard from "./components/Dashboard";
 import AddAssignment from "./components/AddAssignment";
+import Calendar from "./components/Calendar";
 import "./App.css";
 
 function ProtectedRoute({ isAuthenticated }: { isAuthenticated: boolean }) {
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-
   return <Outlet />;
 }
 
@@ -22,11 +22,9 @@ function PublicOnlyRoute({ isAuthenticated }: { isAuthenticated: boolean }) {
   if (isAuthenticated) {
     return <Navigate to="/home" replace />;
   }
-
   return <Outlet />;
 }
 
-// NavBar only shows on these pages
 function MainLayout() {
   return (
     <>
@@ -49,9 +47,7 @@ function App() {
     async function loadSession() {
       const { data } = await supabase.auth.getSession();
 
-      if (!isMounted) {
-        return;
-      }
+      if (!isMounted) return;
 
       setIsAuthenticated(Boolean(data.session));
       setUserId(data.session?.user.id ?? "");
@@ -86,20 +82,24 @@ function App() {
           element={<Navigate to={isAuthenticated ? "/home" : "/login"} replace />}
         />
 
+        {/* No NavBar on login/signup */}
         <Route element={<PublicOnlyRoute isAuthenticated={isAuthenticated} />}>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
         </Route>
 
+        {/* Protected pages with NavBar */}
         <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
           <Route element={<MainLayout />}>
-            <Route path="/profile" element={<ProfileSetting />} />
-            <Route path="/assignment/:id" element={<AssignmentDetail userId={userId} />} />
             <Route path="/home" element={<Dashboard userId={userId} />} />
-            <Route path="/calendar" element={<div>Calendar Page</div>} />
+            <Route path="/calendar" element={<Calendar userId={userId} />} />
             <Route path="/add-assignment" element={<AddAssignment userId={userId} />} />
+            <Route path="/assignment/:id" element={<AssignmentDetail userId={userId} />} />
+            <Route path="/profile" element={<ProfileSetting />} />
           </Route>
         </Route>
+
+        {/* Catch all unknown routes */}
         <Route
           path="*"
           element={<Navigate to={isAuthenticated ? "/home" : "/login"} replace />}

@@ -1,0 +1,51 @@
+# --- STUDENT RESOURCE & STUDY PLANNER ---
+
+# Dependencies
+# Never upload this; it's the largest folder and causes the "hundreds of changes" issue
+node_modules/
+.pnpm-store/
+
+# Build Outputs
+# These are auto-generated when you run 'npm run build'
+dist/
+dist-ssr/
+build/
+out/
+bin/
+obj/
+
+# Environment Variables
+# CRUCIAL: Keeps your Supabase URL and API Keys private
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+# Prevents debug logs from cluttering your GitHub
+*.log
+logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor Specific
+# Hides settings that are unique to your computer (VS Code, IntelliJ, etc.)
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+
+# Vite/System files
+.vite/
+.eslintcache
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
